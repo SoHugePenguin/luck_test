@@ -1,212 +1,284 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>幸运儿</title>
-		<style type="text/css">
-			*{
-				margin: 0;
-				padding: 0;
-			}
-			li {
-				list-style: none;
-				color: white;
-				font-size: 28px;
-				position: absolute;
-				transition: all 1000ms linear; 
-			}
-			body {
-				background-color: black;
-			}
-			
-		</style>
-	</head>
-	<body onkeypress="start()">
-		<ul id="name_list">
-			
-		</ul>
-		<script type="text/javascript">
-			//抽奖人数
-			var luck_num = 1;
-			//总名单
-			//var name_list = ["陈豪","陈浩斌","陈泓扬","陈霁涵","陈均","陈鹏谦","陈炜","陈希隆","高彬彬","高佳翔","高骏","何力可","胡佳辉","蒋艳","金鑫","李康帅","李子杭","陆畅","罗豪达","吕心厅","苗佳乐","钱靖翰","沈阳","王书磊","王小琴","王亚飞","王一鸿","王银涛","吴宝鹏","徐勤伟","许扬","杨衍铤","叶帅帅","应佳成","余存宇","张鑫怡","周萌","朱奥星"];
-			//var name_list = ["白永泽","蔡豪谊","曾培毅","陈铭","陈泰历","陈文胜","池威","范依宁","高盈盈","龚杰","郭荣隆","何植康","胡谢派","黄家鹏","黄晓峰","李斌","李昊","李思慧","李植浩","林德志","林梦彬","潘加特","瞿嘉瑞","王发越","王国鹏","王锦楠","魏为豪","吴元浩","夏晨晨","徐昊","薛柠柠","叶文章","张城钝","张淑铭","张子扬","章琪","赵佳奇","郑伟"];
-			var name_list = ["鲍釔丞",
-"蔡涵睿",
-"曾禛",
-"陈斌一",
-"陈家慧",
-"陈立彬",
-"陈柳君",
-"程琳翔",
-"龚申琪",
-"龚骁恺",
-"郭阳光",
-"何潘树",
-"姜堤基",
-"姜雨欣",
-'蒋家乐',
-'金建伟',
-'李嘉涛',
-'李勇呈',
-'林嘉乐',
-'林子为',
-'刘亚琦',
-'罗淳',
-'马祥',
-'毛加贤',
-'钱凯',
-'阮宝海',
-'石乐豪',
-'陶佳聪',
-'王斌莹',
-'王丽',
-'王涛',
-'温从康',
-'吴康瑜',
-'夏伟毅',
-'徐欣婷',
-'许雅娜',
-'叶高康',
-'叶礼赫',
-'赵柏胜',
-'赵奕翔'
-];
-			var width = document.documentElement.clientWidth;
-			var height = document.documentElement.clientHeight;
-			var html = "";
-			for(var i = 0;i<name_list.length;i++){
-				html += "<li id='item_"+i+"'>"+name_list[i]+"</li>"
-			}
-			var ul = document.getElementById("name_list");
-			ul.innerHTML = html;
-			var lis = document.getElementsByTagName("li");
-			for(var j=0;j<lis.length;j++){
-				var top_px = Math.floor(Math.random()*(height-50));
-				var left = Math.floor(Math.random()*(width-100));
-				var li = lis[j];
-				li.style.top = top_px + "px";
-				li.style.left = left +"px";
-			}
-			
-			var state_top = setInterval(function(){
-				for (var k=0;k<lis.length;k++){
-					var li = lis[k];
-					var old_top = li.style.top;
-					var change_px = Math.floor(Math.random()*20);
-					if(Math.random()<0.5){
-						change_px = -change_px;
-					}
-					var top_h = parseInt(old_top)+change_px;
-					if(top_h>(height-50)){
-						top_h = (height-50);
-					}else if(top_h<0) {
-						top_h = 0;
-					}
-					li.style.top = top_h + "px";
-					li.style.opacity = Math.random();
-				}
-			},1000);
-			var state_left = setInterval(function(){
-				for (var h=0;h<lis.length;h++){
-					var li = lis[h];
-					var old_left = li.style.left;
-					var change_px = Math.floor(Math.random()*20);
-					if(Math.random()<0.5){
-						change_px = -change_px;
-					}
-					var left_w = parseInt(old_left)+change_px;
-					if(left_w>(width-50)){
-						left_w = (width-50);
-					}else if(left_w<0){
-						left_w = 0;
-					}
-					li.style.left = left_w +"px";
-				}
-			},1000);
-			var state_move;
-			var state = false;
-			function start(){
-				var key = event.keyCode;
-				if(key==13){
-					if(!state){
-						state = true;
-						clearInterval(state_top);
-						clearInterval(state_left);
-						state_move = setInterval(function(){
-							for (var j=0;j<lis.length;j++){
-								var top_px = Math.floor(Math.random()*(height-50));
-								var left = Math.floor(Math.random()*(width-50));
-								var li = lis[j];
-								li.style.transition = "transition: all 300ms linear;";
-								li.style.fontSize = "28px";
-								li.style.top = top_px + "px";
-								li.style.left = left +"px";
-								li.style.opacity = Math.random();
-							}
-						},300);
-					}else{
-						state = false;
-						clearInterval(state_move);
-						var names = [];
-						var num = [];
-						var m = 0;
-						var flag = false;
-						while(true){
-							var index = Math.floor(Math.random()*name_list.length);
-							for(var z=0;z<num.length;z++){
-								if(num[z]==index){
-									flag = true;
-									break;
-								}else{
-									flag = false;
-								}
-							}
-							if(flag){
-								continue;
-							}
-							num[m] = index;
-							names[m] = name_list[index];
-							m++;
-							if(names.length==luck_num){//控制一次抽取人数
-								break;
-							}
-						}
-						var newTop = "200px";
-						var newLeft = 0;
-						var fontSize = "48px";
-						for(var k =0 ;k < names.length ;k++){
-							for(var e = 0;e < lis.length;e++){
-								var name_dom = lis[e];
-								if(name_dom.innerHTML==names[k]){
-									name_dom.style.transition = "transition: all 3000ms linear;";
-									name_dom.style.top = newTop;
-									name_dom.style.fontSize = fontSize;
-									name_dom.style.opacity = 1;
-									if(k==0){
-										newLeft += (width-(150*names.length))/(names.length+1);
-										
-									}else{
-										newLeft += ((width-(150*names.length))/(names.length+1))+150;
-									}
-									//console.log(name_dom.innerHTML+":"+newLeft)
-									name_dom.style.left = newLeft+"px";
-								}
-								var f = true;
-								for(var h =0 ;h < names.length ;h++){
-									if(name_dom.innerHTML == names[h]){
-										f = false;
-									}
-								}
-								if(f){
-									name_dom.style.opacity = 0.2;	
-								}
-								
-							}
-						}
-					}
-				}
-			}
-		</script>
-	</body>
+
+<head>
+    <meta charset="utf-8"/>
+    <title>测试网站</title>
+    <link href="css/qwq.css" rel="stylesheet">
+</head>
+
+<body>
+<div id="head">
+    <div class="tou1_fu">
+        <div class="gray">
+            <span class="huanYing">欢迎来到e乐购!</span>
+            <span class="login">&nbsp;<a href="#">[登录]</a>&nbsp;</span>
+            <span>|</span>
+            <span class="zhuCe">&nbsp;<a href="#">[注册]</a>&nbsp;</span>
+        </div>
+    </div>
+
+    <div class="dingDan">
+			<span><a href="#">订单查询</a> &nbsp;|&nbsp; <a href="#">我的e乐购</a> &nbsp;|
+				&nbsp;</span>
+        <span class="a1"></span>
+        <span>
+				&nbsp;&nbsp;&nbsp;&nbsp;400-800-0000 &nbsp;|
+				&nbsp;<a href="#">下载乐购app</a> &nbsp;|
+				&nbsp;<a href="#">客服中心</a>
+			</span>
+    </div>
+</div>
+
+<div id="daoHang" style="margin-top: 10px;">
+    <div style="margin-top: 20px; ">
+        <div id="gouWuChe">
+            <img src="img/logo.jpg" alt="">
+        </div>
+        <div id="logo1">
+            <img src="img/top_center.jpg" width="506" height="29" alt="">
+        </div>
+        <div id="input_id">
+            <label>
+                <input type="text" class="input1"/>
+            </label>
+            <a href="#" class="button1">
+                <div>搜索</div>
+            </a>
+        </div>
+        <a href="#" id="shop2">
+            <span class="a2"></span>
+            <font
+                    style="margin-left: 50px;font-size: 10px; line-height: 40px;">
+                &nbsp;我的购物车 <span
+                    style="color: gray;">&gt;</span>
+            </font>
+            <div class="a2_logo"><span class="a2_logo_1">0</span></div>
+        </a>
+        <div class="input_div1">
+            <a href="#">太阳镜</a>
+            <a href="#">蕉下果</a>
+            <a href="#">蔬脆片</a>
+            <a href="#">德亚酸</a>
+            <a href="#">牛奶蚕</a>
+            <a href="#">丝面膜</a>
+            <a href="#">山地车</a>
+            <a href="#">BB霜乳</a>
+            <a href="#">胶枕</a>
+            <a href="#">蝙蝠侠系列</a>
+            <a href="#">石英表</a>
+            <a href="#">拍立得</a>
+        </div>
+    </div>
+</div>
+
+<div id="neiRong">
+    <div class="neiRong1">
+        <div class="neiRong1_div"></div>
+        <p class="neiRong1_p">全部分类</p>
+    </div>
+    <div class="neiRong2">
+        <p>首页</p>
+    </div>
+    <div class="neiRong3">
+        <p>精选品牌</p>
+    </div>
+    <div class="neiRong4">
+        <p>全球购</p>
+    </div>
+    <div class="neiRong5">
+        <p>品牌馆</p>
+    </div>
+</div>
+
+<div id="jingXuan">
+    <div class="redJingXuan">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+        </p>
+        <div class="jingXuanExmable">
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+        </div>
+
+    </div>
+    <div class="redJingXuan">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+        </p>
+        <div class="jingXuanExmable">
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+        </div>
+    </div>
+    <div class="redJingXuan">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+        </p>
+        <div class="jingXuanExmable">
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+        </div>
+    </div>
+    <div class="redJingXuan">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+        </p>
+        <div class="jingXuanExmable">
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+        </div>
+    </div>
+    <div class="redJingXuan">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+        </p>
+        <div class="jingXuanExmable">
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+        </div>
+    </div>
+    <div class="redJingXuan">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+        </p>
+        <div class="jingXuanExmable">
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+        </div>
+    </div>
+    <div class="redJingXuan">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+        </p>
+        <div class="jingXuanExmable">
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+        </div>
+    </div>
+    <div class="redJingXuan">
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;精品推荐&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&gt;
+        </p>
+        <div class="jingXuanExmable">
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+            <p><a>面部护理</a>&nbsp;&nbsp;<a>洗发护发</a></p>
+        </div>
+    </div>
+</div>
+
+<div id="bottom">
+    <div class="bottom1">
+        <div class="logo3"></div>
+        <b>精品推荐</b>
+        <hr/>
+    </div>
+    <div class="bottom2">
+        <table cellspacing="30">
+            <tr>
+                <td><a href="#"><img src="img/t_1.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_2.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_3.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_4.jpg" alt=""></a></td>
+            </tr>
+            <tr>
+                <td><a href="#"><img src="img/t_5.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_6.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_7.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_8.jpg" alt=""></a></td>
+            </tr>
+            <tr>
+                <td><a href="#"><img src="img/t_9.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_10.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_11.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_12.jpg" alt=""></a></td>
+            </tr>
+            <tr>
+                <td><a href="#"><img src="img/t_9.jpg " alt=""></a></td>
+                <td><a href="#"><img src="img/t_10.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_11.jpg" alt=""></a></td>
+                <td><a href="#"><img src="img/t_12.jpg" alt=""></a></td>
+            </tr>
+        </table>
+    </div>
+
+</div>
+
+<div id="diBu">
+    <div class="diBu1">
+        <dl>
+            <dt>使用帮助</dt>
+            <dd><a href="#">新手指南</a></dd>
+            <dd><a href="#">常见问题</a></dd>
+            <dd><a href="#">用户协议</a></dd>
+        </dl>
+        <dl>
+            <dt>会员服务</dt>
+            <dd><a href="#">积分政策</a></dd>
+            <dd><a href="#">会员权益</a></dd>
+            <dd><a href="#">会员等级</a></dd>
+        </dl>
+        <dl>
+            <dt>支付方式</dt>
+            <dd><a href="#">积分支付</a></dd>
+            <dd><a href="#">货到付款</a></dd>
+            <dd><a href="#">在线支付</a></dd>
+            <dd><a href="#">优惠券支付</a></dd>
+        </dl>
+        <dl>
+            <dt>配送方式</dt>
+            <dd><a href="#">包邮政策</a></dd>
+            <dd><a href="#">费用说明</a></dd>
+            <dd><a href="#">配送说明</a></dd>
+        </dl>
+        <dl>
+            <dt>售后服务</dt>
+            <dd><a href="#">电子发票</a></dd>
+            <dd><a href="#">售后咨询</a></dd>
+            <dd><a href="#">退货办理</a></dd>
+            <dd><a href="#">退货政策</a></dd>
+        </dl>
+    </div>
+
+    <div class="diBu2">
+        <ul>
+            <li>
+                <h2>手机e乐购</h2>
+                <img src="img/footer_ewm_01.png" alt=""/>
+                <p>下载移动客户端</p>
+            </li>
+            <li>
+                <h2>e乐购微信</h2>
+                <img src="img/footer_ewm_02.png" alt=""/>
+                <p>e乐购官方微信</p>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="zuoCe">
+    <div class="zuoCe1"></div>
+    <p class="zuoCe1_p">账号</p>
+    <p class="line1"></p>
+    <div class="zuoCe2"></div>
+    <p class="zuoCe2_p">购物车</p>
+    <div class="zuoCe2_circle">&nbsp;</div>
+    <p class="zuoCe2_circle_p">0</p>
+    <p class="line2"></p>
+    <div class="zuoCe3"></div>
+    <p class="zuoCe3_p">收藏</p>
+    <p class="line3"></p>
+
+    <div class="erWeiMa"></div>
+    <div class="keFu"></div>
+    <div class="chuanSon"></div>
+</div>
+
+<div class="test">
+
+</div>
+
+<script href="js/shop.js"></script>
+</body>
+
 </html>
